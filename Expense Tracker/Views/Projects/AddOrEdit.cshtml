@@ -1,0 +1,97 @@
+﻿@model Expense_Tracker.Models.Project
+
+<h2>@(Model.ProjectId == 0 ? "Create New Project" : "Edit Project")</h2>
+
+<form asp-controller="Projects" asp-action="AddOrEdit" method="post" id="projectForm">
+>
+    <div class="form-group">
+        <label asp-for="Name">Project Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClientId">Client</label>
+        <select asp-for="ClientId" class="form-control" asp-items="ViewBag.Clients">
+            <option value="">-- Select Client --</option>
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmployeeId">Employee</label>
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees">
+            <option value="">-- Select Employee --</option>
+        </select>
+        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HoursOfWork">Hours of Work</label>
+        <input asp-for="HoursOfWork" class="form-control" id="hoursOfWork" />
+        <span asp-validation-for="HoursOfWork" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Total">Total</label>
+        <input asp-for="Total" class="form-control" readonly />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#EmployeeId, #hoursOfWork').on('input', function () {
+                calculateTotal();
+            });
+
+            calculateTotal();
+        });
+
+        function calculateTotal() {
+            var employeeId = $('#EmployeeId').val();
+            var hoursOfWork = parseFloat($('#hoursOfWork').val());
+
+            if (!isNaN(hoursOfWork)) {
+                $.ajax({
+                    url: '@Url.Action("GetEmployeeHourlyRate", "Projects")',
+                    type: 'GET',
+                    data: { employeeId: employeeId },
+                    success: function (result) {
+                        var hourlyRate = parseFloat(result);
+                        if (!isNaN(hourlyRate)) {
+                            var total = (hourlyRate * hoursOfWork).toFixed(2);
+                            $('#Total').val(total);
+                        }
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            $('#EmployeeId, #hoursOfWork').on('input', function () {
+                calculateTotal();
+            });
+
+            $('#EmployeeId').on('change', function () {
+                calculateTotal();
+            });
+
+            calculateTotal();
+
+            $('#projectForm').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function () {
+                        window.location.href = '@Url.Action("Index", "Projects")';
+                    },
+                    error: function () {
+                        alert('An error occurred while saving the project.');
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}

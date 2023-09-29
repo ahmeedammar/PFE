@@ -1,0 +1,101 @@
+﻿@model Expense_Tracker.Models.Transaction
+
+@{
+    ViewData["PageTitle"] = Model.TransactionId == 0 ? "Create a new transaction" : "Edit transaction";
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="widget p-5" style="background-color:#212b36">
+            <form asp-controller="Transaction" asp-action="AddOrEdit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="TransactionId" value="@Model.TransactionId" />
+                <div class="mb-3">
+                    <ejs-datepicker id="date" name="Date"
+                                    placeholder="Date" floatLabelType="Always"
+                                    format="MMM-dd-yy"></ejs-datepicker>
+                </div>
+                <div class="mb-3">
+                    <ejs-textbox id="supplier" placeholder="Supplier" name="Supplier"
+                                 floatLabelType="Always"></ejs-textbox>
+                </div>
+                <div class="mb-3">
+                    <ejs-dropdownlist id="ddlCategory" name="CategoryId"
+                                      dataSource="@ViewBag.Categories" placeholder="Category"
+                                      floatLabelType="Always" allowFiltering="true" ignoreAccent="true"
+                                      filterType="Contains" popupHeight="220px">
+                        <e-dropdownlist-fields value="CategoryId" text="TitleWithIcon"></e-dropdownlist-fields>
+                    </ejs-dropdownlist>
+                    <span asp-validation-for="CategoryId" class="text-danger fs-6"></span>
+                </div>
+                <div class="mb-3">
+                    <!-- Use ConvertedAmount instead of Amount -->
+                    <ejs-numerictextbox id="amount" name="Amount"
+                                        placeholder="Amount" floatLabelType="Always"
+                                        min="0" format="##,##0.###" value="@Model.ConvertedAmount"></ejs-numerictextbox>
+                    <span asp-validation-for="Amount" class="text-danger fs-6"></span>
+                </div>
+                <div class="mb-3">
+                    <ejs-dropdownlist id="currency" name="Currency"
+                                      dataSource='new List<string> { "EUR", "USD", "TND" }'
+                                      placeholder="Select Currency" floatLabelType="Always"
+                                      onchange="performConversion()"></ejs-dropdownlist>
+                    <span asp-validation-for="Currency" class="text-danger fs-6"></span>
+                </div>
+                <div class="mb-3">
+                    <ejs-numerictextbox id="convertedAmount" name="ConvertedAmount"
+                                        placeholder="Converted Amount" floatLabelType="Always"
+                                        min="0" format="##,##0.###" readonly="true"></ejs-numerictextbox>
+                    <input type="hidden" asp-for="ConvertedAmount" />
+                </div>
+                <div class="mb-3">
+                    <ejs-textbox id="note" placeholder="Note" name="Note"
+                                 floatLabelType="Always" multiline="true"></ejs-textbox>
+                </div>
+
+                <ejs-button id="convertButton" type="button" content="Convert" cssClass="e-primary" onclick="performConversion()"></ejs-button>
+
+                <input id="submitButton" type="submit" value="Add Transaction" class="e-success" disabled="disabled" />
+            </form>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="widget h-100 d-flex justify-content-center align-items-center">
+            <i class="fa-solid fa-money-bill-transfer fa-2xl"></i>
+        </div>
+    </div>
+</div>
+<script>
+    function performConversion() {
+        var amount = document.getElementById("amount").ej2_instances[0].value;
+        var currency = document.getElementById("currency").ej2_instances[0].value;
+
+        if (amount && currency) {
+            var appId = "449c59c6002946a08dfe81b0b3fdc699";
+            var url = `https://openexchangerates.org/api/latest.json?app_id=${appId}&base=USD&symbols=TND`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Log the API response for debugging
+
+                    var conversionRate = data.rates.TND;
+                    console.log("Conversion Rate:", conversionRate); // Log the conversion rate for debugging
+
+                    var convertedAmount = amount * conversionRate;
+                    console.log("Converted Amount:", convertedAmount); // Log the converted amount for debugging
+
+                    document.getElementById("convertedAmount").ej2_instances[0].value = convertedAmount.toFixed(2);
+
+                    // Enable the submit button after conversion is performed
+                    document.getElementById("submitButton").removeAttribute("disabled");
+                })
+                .catch(error => {
+                    console.log(error);
+                    // Display an error message to the user
+                    alert("Failed to convert currency. Please try again.");
+                });
+        }
+    }
+
+</script>

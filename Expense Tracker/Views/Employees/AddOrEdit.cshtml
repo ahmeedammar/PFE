@@ -1,0 +1,21 @@
+﻿@model Expense_Tracker.Models.Employee
+
+<h2>@(Model.EmployeeId == 0 ? "Create Employee" : "Edit Employee")</h2>
+
+<form asp-controller="Employees" asp-action="AddOrEdit" method="post">
+    @if (Model.EmployeeId != 0)
+    {
+        <input type="hidden" asp-for="EmployeeId" />
+    }
+    <div class="form-group">
+        <label asp-for="Name">Employee Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HourlyRate">Hourly Rate</label>
+        <input asp-for="HourlyRate" class="form-control" />
+        <span asp-validation-for="HourlyRate" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

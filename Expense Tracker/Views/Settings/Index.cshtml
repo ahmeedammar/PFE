@@ -1,0 +1,28 @@
+﻿@model Expense_Tracker.Models.SettingsModel
+
+<h2>Settings</h2>
+
+<form method="post" action="/Settings/SaveSettings">
+    <div class="form-group">
+        <label for="sidebarOrder">Sidebar Order:</label>
+        <select id="sidebarOrder" name="SidebarOrder" class="form-control">
+            <option value="Dashboard">Dashboard</option>
+            <option value="Categories">Categories</option>
+            <option value="Transactions">Transactions</option>
+            <option value="Employees">Employees</option>
+            <option value="ImportExcel">Import Excel</option>
+            <option value="Clients">Clients</option>
+            <option value="Projects">Projects</option>
+            <option value="Reports">Reports</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="appName">Application Name:</label>
+        <input type="text" id="appName" name="AppName" class="form-control"  />
+    </div>
+    <div class="form-group">
+        <label for="logo">Logo:</label>
+        <input type="file" id="logo" name="Logo" class="form-control-file" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

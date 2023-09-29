@@ -1,0 +1,14 @@
+﻿@*@{
+    ViewData["Title"] = "Import File";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Import" asp-action="ProcessFile" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Select Excel File:</label>
+        <input type="file" id="file" name="file" class="form-control-file" accept=".xls" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+</form>
+*@

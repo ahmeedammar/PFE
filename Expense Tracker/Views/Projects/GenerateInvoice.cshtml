@@ -1,0 +1,132 @@
+﻿@model Expense_Tracker.Models.InvoiceViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header img.logo {
+                max-width: 150px;
+            }
+
+            .header h2 {
+                font-family:'Century Gothic';
+                margin: 0;
+                font-size: 35px; /* Increased font size */
+                font-weight: bold; /* Added font weight */
+                color: darkcyan; /* Added font color */
+            }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 20px;
+            text-decoration: underline;
+            font-size: 20px;
+            color:darkslateblue;
+            font-family:Lato;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .table th,
+            .table td {
+                border: 2px solid #000; /* Black borders */
+                padding: 12px;
+                text-align: left;
+                background-color: #f9f9f9;
+            }
+
+            .table th {
+                background-color: #eaeaea; /* Header background color */
+            }
+
+        .invoice-details .label {
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .footer img.logo {
+                /*max-width: 150px;*/
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+@*            <img src="~/Views/Projects/PeopleDollar.png" alt="FinMoney Logo" class="logo" />
+*@            <h2>FinMoney</h2>
+        </div>
+        <div class="section-title">Client Information</div>
+        <table class="table">
+            <tr>
+                <th>Client Name</th>
+                <td>@Model.ClientName</td>
+            </tr>
+            
+            <!-- Add more client information fields if needed -->
+        </table>
+
+        <div class="section-title">Project Information</div>
+        <table class="table">
+            <tr>
+                <th>Project Name</th>
+                <td>@Model.ProjectName</td>
+            </tr>
+            <tr>
+                <th>Employee Name</th>
+                <td>@Model.EmployeeName</td>
+            </tr>
+            <tr>
+                <th>Hours of Work</th>
+                <td>@Model.HoursOfWork</td>
+            </tr>
+            <tr>
+                <th>Hourly Rate</th>
+                <td>@Model.HourlyRate</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>@Model.Total</td>
+            </tr>
+            <!-- Add more project information fields if needed -->
+        </table>
+
+        <!-- Add payment information if available -->
+
+        <div class="footer">
+@*            <img src="~/PeopleDollar.png" alt="FinMoney Logo" class="logo" />
+*@        </div>
+    </div>
+</body>
+</html>
